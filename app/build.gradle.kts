@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "ru.vafeen.studymate"
     compileSdk = 36
-    1
+
     defaultConfig {
         applicationId = "ru.vafeen.studymate"
         minSdk = 26
