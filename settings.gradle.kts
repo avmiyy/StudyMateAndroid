@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Compose clean arch multimodule example"
+rootProject.name = "StudyMate"
 include(":app")
 include(":presentation")
 include(":data")
