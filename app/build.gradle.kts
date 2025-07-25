@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "ru.vafeen.example"
+    namespace = "ru.vafeen.studymate"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "ru.vafeen.example"
+        applicationId = "ru.vafeen.studymate"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
