@@ -1,4 +1,4 @@
-package ru.vafeen.example
+package ru.vafeen.studymate
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
