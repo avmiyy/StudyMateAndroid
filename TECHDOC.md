@@ -105,6 +105,6 @@ fun formatUserName(
 ## common rules
 
 - use oneline functions where possible
-- all classes are internal in data module;
+- all classes are internal in data module
 - all interfaces are public in domain module
 - no import *, only single import
