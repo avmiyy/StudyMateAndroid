@@ -102,3 +102,8 @@ fun formatUserName(
         "$firstName $lastName"
     }
 ```
+## common rules
+
+- use oneline functions where possible
+- all classes are internal in data module;
+- all interfaces are public in domain module
