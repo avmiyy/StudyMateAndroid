@@ -1,5 +1,7 @@
 package ru.vafeen.domain.network.repository
 
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import ru.vafeen.domain.models.Advertisement
 import ru.vafeen.domain.network.result.ResponseResult
 
@@ -24,4 +26,20 @@ interface AdvertisementsRemoteRepository {
         minAge: Int? = null,
         maxAge: Int? = null
     ): ResponseResult<List<Advertisement>>
+
+    /**
+     * Получает список объявлений с возможностью фильтрации
+     *
+     * @param tags Список тегов для фильтрации
+     * @param gender Пол для фильтрации
+     * @param minAge Минимальный возраст
+     * @param maxAge Максимальный возраст
+     * @return Список DTO объявлений
+     */
+    fun getPagedAnnouncements(
+        tags: List<String>? = null,
+        gender: String? = null,
+        minAge: Int? = null,
+        maxAge: Int? = null
+    ): Flow<PagingData<Advertisement>>
 }

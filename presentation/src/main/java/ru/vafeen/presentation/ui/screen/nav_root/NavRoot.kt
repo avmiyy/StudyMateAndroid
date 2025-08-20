@@ -7,11 +7,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.vafeen.presentation.ui.screen.advertisements.AdvertisementsScreen
-import ru.vafeen.presentation.ui.theme.StudyMateTheme
+import ru.vafeen.presentation.ui.theme.MainTheme
 
 @Composable
 internal fun NavRoot() {
-    StudyMateTheme {
+    MainTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
                 AdvertisementsScreen()
