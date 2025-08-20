@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import ru.vafeen.presentation.ui.theme.AppTheme
 
 /**
- * Displays a small circular loading indicator.
+ * Отображает небольшой круговой индикатор загрузки, центрированный по ширине.
  */
 @Composable
 internal fun LoadingItem() {
@@ -23,7 +23,6 @@ internal fun LoadingItem() {
     ) {
         CircularProgressIndicator(
             color = AppTheme.colors.mainColor,
-
-            )
+        )
     }
 }

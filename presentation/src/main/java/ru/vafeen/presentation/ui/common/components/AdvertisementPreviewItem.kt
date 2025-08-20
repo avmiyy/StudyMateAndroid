@@ -12,6 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.vafeen.domain.models.Advertisement
 
+/**
+ * Composable функция для отображения превью объявления в карточке.
+ *
+ * Располагает ID слева и далее заголовок с именем автора в колонке.
+ */
 @Composable
 internal fun Advertisement.AdvertisementPreviewItem() {
     Card(modifier = Modifier.padding(5.dp)) {

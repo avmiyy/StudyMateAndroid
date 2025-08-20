@@ -13,10 +13,26 @@ import ru.vafeen.domain.network.repository.AdvertisementsRemoteRepository
 import ru.vafeen.domain.network.result.ResponseResult
 import javax.inject.Inject
 
+/**
+ * Репозиторий для удалённого доступа к объявлениям с использованием Retrofit.
+ *
+ * @property service Сервис для сетевого взаимодействия с API объявлений.
+ */
 internal class RetrofitAdvertisementsRemoteRepository @Inject constructor(
     private val service: AdvertisementsService
 ) : AdvertisementsRemoteRepository {
 
+    /**
+     * Получает список объявлений с возможностью указания параметров фильтрации и пагинации.
+     *
+     * @param page Номер страницы (начинается с 1).
+     * @param limit Максимальное количество объявлений на странице.
+     * @param tags Список тегов для фильтрации, или null.
+     * @param gender Пол для фильтрации, или null.
+     * @param minAge Минимальный возраст для фильтрации, или null.
+     * @param maxAge Максимальный возраст для фильтрации, или null.
+     * @return Результат запроса с обёрткой [ResponseResult], содержащий список доменных моделей объявлений.
+     */
     override suspend fun getAnnouncements(
         page: Int?,
         limit: Int?,
@@ -37,6 +53,16 @@ internal class RetrofitAdvertisementsRemoteRepository @Inject constructor(
                 .map { it.toDomain() }
         }
 
+    /**
+     * Возвращает поток постраничных данных объявлений с фильтрацией,
+     * поддерживаемый библиотекой Paging 3 и реализованный через [AdvertisementPagingSource].
+     *
+     * @param tags Список тегов для фильтрации, или null.
+     * @param gender Пол для фильтрации, или null.
+     * @param minAge Минимальный возраст для фильтрации, или null.
+     * @param maxAge Максимальный возраст для фильтрации, или null.
+     * @return Поток постраничных данных объявлений типа [Advertisement].
+     */
     override fun getPagedAnnouncements(
         tags: List<String>?,
         gender: String?,
@@ -64,10 +90,20 @@ internal class RetrofitAdvertisementsRemoteRepository @Inject constructor(
         },
     ).flow
 
+    private companion object {
+        /**
+         * Размер страницы при загрузке объявлений.
+         */
+        const val PAGE_SIZE = 10
 
-    companion object {
-        private const val PAGE_SIZE = 10
-        private const val INITIAL_LOAD_SIZE = PAGE_SIZE * 3
-        private const val MAX_LOAD_SIZE = PAGE_SIZE * 5
+        /**
+         * Размер начальной загрузки (кратный PAGE_SIZE).
+         */
+        const val INITIAL_LOAD_SIZE = PAGE_SIZE * 3
+
+        /**
+         * Максимальный размер кэша загруженных элементов.
+         */
+        const val MAX_LOAD_SIZE = PAGE_SIZE * 5
     }
 }

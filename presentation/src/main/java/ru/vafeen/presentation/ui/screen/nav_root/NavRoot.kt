@@ -9,6 +9,12 @@ import androidx.compose.ui.Modifier
 import ru.vafeen.presentation.ui.screen.advertisements.AdvertisementsScreen
 import ru.vafeen.presentation.ui.theme.MainTheme
 
+/**
+ * Восходящая навигационная точка входа приложения,
+ * оформленная в тему и с основным Scaffold.
+ *
+ * Внутри отображается экран объявлений.
+ */
 @Composable
 internal fun NavRoot() {
     MainTheme {

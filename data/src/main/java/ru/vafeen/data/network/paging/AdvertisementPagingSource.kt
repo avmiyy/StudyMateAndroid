@@ -5,12 +5,24 @@ import androidx.paging.PagingState
 import ru.vafeen.domain.models.Advertisement
 import ru.vafeen.domain.network.result.ResponseResult
 
+/**
+ * Пейджинг-источник для загрузки страниц с объявлениями из сети.
+ *
+ * @property pageSize Размер страницы для загрузки.
+ * @property getAdvertisements Функция suspend для получения списка объявлений согласно конфигурации страницы.
+ */
 internal class AdvertisementPagingSource(
     private val pageSize: Int,
     private val getAdvertisements: suspend (AdvertisementPageConfig) -> ResponseResult<List<Advertisement>>
 ) : PagingSource<Int, Advertisement>() {
 
-
+    /**
+     * Загружает страницу данных с индексом из параметров.
+     *
+     * @param params Параметры загрузки, содержащие ключ страницы.
+     * @return Результат загрузки — успешная страница или ошибка.
+     * @throws Exception В случае ошибки загрузки генерируется исключение.
+     */
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Advertisement> {
         val pageIndex = params.key ?: START_PAGE
         return try {
@@ -35,22 +47,33 @@ internal class AdvertisementPagingSource(
         }
     }
 
-    // эта функция должна загрузить страницу в которой обновились данные  
+    /**
+     * Определяет ключ обновления страницы для повторной загрузки.
+     *
+     * @param state Состояние пагинации с информацией о позициях и страницах.
+     * @return Ключ страницы для обновления или null, если определить невозможно.
+     */
     override fun getRefreshKey(state: PagingState<Int, Advertisement>): Int? {
-        // это индекс элемента который запрашивался последним  
         val anchorPosition = state.anchorPosition ?: return null
-        // конвертировать индекс в номер страницу  
         val page = state.closestPageToPosition(anchorPosition) ?: return null
         return page.prevKey?.plus(1) ?: page.nextKey?.minus(1)
     }
 
+    /**
+     * Конфигурация для запроса страницы объявлений.
+     *
+     * @property pageIndex Индекс страницы для загрузки.
+     * @property pageSize Количество элементов на странице.
+     */
     data class AdvertisementPageConfig(
         val pageIndex: Int,
         val pageSize: Int,
     )
 
-    companion object {
-        private const val START_PAGE = 1
+    private companion object {
+        /**
+         * Номер начальной страницы пагинации.
+         */
+        const val START_PAGE = 1
     }
 }
-

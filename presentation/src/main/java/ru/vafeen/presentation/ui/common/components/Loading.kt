@@ -7,6 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.vafeen.presentation.ui.theme.AppTheme
 
+/**
+ * Отображает индикатор загрузки в виде кругового прогресса.
+ */
 @Composable
 internal fun Loading() {
     CircularProgressIndicator(

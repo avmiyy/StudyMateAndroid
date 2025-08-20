@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.dp
 import ru.vafeen.presentation.ui.theme.AppTheme
 
 /**
- * Displays an error message with a retry button.
+ * Отображает элемент с сообщением об ошибке и кнопкой повторной попытки.
  *
- * @param message The error message to display.
- * @param modifier Modifier to apply to this composable.
- * @param onClickRetry Callback invoked when the retry button is clicked.
+ * @param message Текст сообщения об ошибке для отображения.
+ * @param modifier Модификатор для настройки внешнего вида и поведения компонента.
+ * @param onClickRetry Колбэк, вызываемый при нажатии на кнопку "Повторить".
  */
 @Composable
 internal fun ErrorItem(

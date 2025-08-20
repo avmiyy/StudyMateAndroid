@@ -18,12 +18,18 @@ import ru.vafeen.presentation.ui.common.components.AdvertisementPreviewItem
 import ru.vafeen.presentation.ui.common.components.ErrorItem
 import ru.vafeen.presentation.ui.common.components.LoadingItem
 
+/**
+ * Экран для отображения списка объявлений с поддержкой пагинации.
+ *
+ * Загружает объявления из ViewModel, отображает список с состояниями загрузки и ошибками.
+ */
 @Composable
 internal fun AdvertisementsScreen() {
     val viewModel = hiltViewModel<AdvertisementsScreenViewModel>()
     val advertisements = viewModel.pagedAdvertisementsFlow.collectAsLazyPagingItems()
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
+        // Состояние загрузки в начале списка (prepend)
         if (advertisements.loadState.prepend is LoadState.Loading) {
             item {
                 Row(
@@ -37,6 +43,7 @@ internal fun AdvertisementsScreen() {
                 }
             }
         }
+        // Ошибка загрузки в начале списка
         if (advertisements.loadState.prepend is LoadState.Error) {
             val error = advertisements.loadState.prepend as LoadState.Error
             item {
@@ -48,6 +55,7 @@ internal fun AdvertisementsScreen() {
             }
         }
 
+        // Элементы списка объявлений
         items(count = advertisements.itemCount) { index ->
             val advertisement = advertisements[index]
             if (advertisement != null) {
@@ -56,6 +64,8 @@ internal fun AdvertisementsScreen() {
                 LoadingItem()
             }
         }
+
+        // Ошибка загрузки в конце списка (append)
         if (advertisements.loadState.append is LoadState.Error) {
             val error = advertisements.loadState.append as LoadState.Error
             item {
@@ -66,6 +76,7 @@ internal fun AdvertisementsScreen() {
                 )
             }
         }
+        // Состояние загрузки в конце списка
         if (advertisements.loadState.append is LoadState.Loading) {
             item {
                 Row(

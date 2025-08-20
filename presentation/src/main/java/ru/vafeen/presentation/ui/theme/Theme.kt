@@ -7,13 +7,13 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /**
- * Data class representing the color palette for the app theme.
+ * Класс, описывающий цветовую палитру приложения.
  *
- * @property mainColor Primary color used in the app.
- * @property background Background color of the UI.
- * @property text Color used for text content.
- * @property buttonColor Color used for buttons.
- * @property error Color used to indicate errors.
+ * @property mainColor Основной цвет, используемый в приложении.
+ * @property background Цвет фона интерфейса.
+ * @property text Цвет текста.
+ * @property buttonColor Цвет кнопок.
+ * @property error Цвет, указывающий на ошибки.
  */
 internal data class AppThemeColors(
     val mainColor: Color,
@@ -24,7 +24,7 @@ internal data class AppThemeColors(
 )
 
 /**
- * Light color palette for the app theme.
+ * Светлая палитра цветов для темы приложения.
  */
 private val basePalette = AppThemeColors(
     mainColor = Color(0xFFECEA0E),
@@ -35,7 +35,7 @@ private val basePalette = AppThemeColors(
 )
 
 /**
- * Dark color palette for the app theme, based on [basePalette] with overrides.
+ * Темная палитра цветов для темы приложения, основанная на [basePalette] c переопределениями.
  */
 private val baseDarkPalette = basePalette.copy(
     background = Color.Black,
@@ -44,13 +44,13 @@ private val baseDarkPalette = basePalette.copy(
 )
 
 /**
- * Composable function that applies the main theme to the app's UI.
+ * Компонент-тема, применяющий к подсоставному контенту основную цветовую схему.
  *
- * It selects either the light or dark color palette based on the [darkTheme] parameter,
- * which defaults to the system setting.
+ * Выбирает светлую или темную палитру в зависимости от параметра [darkTheme],
+ * который по умолчанию соответствует системной настройке.
  *
- * @param darkTheme Whether to use the dark theme colors.
- * @param content The composable content to which the theme will be applied.
+ * @param darkTheme Использовать ли темную тему.
+ * @param content Составной контент, к которому применяется тема.
  */
 @Composable
 internal fun MainTheme(
@@ -70,11 +70,11 @@ internal fun MainTheme(
 }
 
 /**
- * Object to access the current app theme colors from the composition.
+ * Объект для доступа к текущим цветам темы приложения из композиции.
  */
 internal object AppTheme {
     /**
-     * The current colors used by the app theme.
+     * Текущая палитра цветов темы.
      */
     val colors: AppThemeColors
         @Composable
@@ -82,9 +82,9 @@ internal object AppTheme {
 }
 
 /**
- * CompositionLocal holding the current [AppThemeColors].
+ * CompositionLocal для хранения текущей палитры цветов [AppThemeColors].
  *
- * Throws an error if accessed outside of a [MainTheme] composable.
+ * Вызывает ошибку, если используется вне компонента [MainTheme].
  */
 private val LocalColors = staticCompositionLocalOf<AppThemeColors> {
     error("Composition error: AppThemeColors not provided")
