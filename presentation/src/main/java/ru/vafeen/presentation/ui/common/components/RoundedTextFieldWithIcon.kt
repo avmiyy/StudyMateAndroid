@@ -20,6 +20,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * Текстовое поле с закругленными углами и опциональной иконкой.
+ *
+ * Предоставляет кастомное текстовое поле с белым фоном, закругленными углами 20dp
+ * и возможностью добавления иконки в начале.
+ *
+ * @param modifier Модификатор для настройки внешнего вида и поведения текстового поля
+ * @param value Текущее значение текстового поля
+ * @param onValueChange Функция обратного вызова при изменении значения текстового поля
+ * @param placeholder Текст-подсказка, отображаемый когда поле пустое
+ * @param icon Опциональная иконка для отображения в начале текстового поля
+ */
 @Composable
 fun RoundedTextFieldWithIcon(
     modifier: Modifier = Modifier,

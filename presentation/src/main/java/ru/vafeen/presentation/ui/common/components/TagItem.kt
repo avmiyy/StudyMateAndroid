@@ -11,7 +11,20 @@ import androidx.compose.ui.unit.dp
 import ru.vafeen.domain.models.Advertisement
 import ru.vafeen.presentation.ui.common.converters.toComposeColor
 
-
+/**
+ * Composable функция для отображения отдельного тега в виде карточки.
+ *
+ * Отображает тег в виде закругленной карточки с хештегом и названием тега.
+ * Цвет карточки соответствует цвету тега.
+ *
+ * @property name Название тега, отображается с префиксом "#"
+ * @property color Цвет фона карточки тега, конвертируется в Compose Color
+ *
+ * Карточка тега имеет:
+ * - Закругление: 10dp со всех сторон
+ * - Цвет фона: из color тега, конвертированный в Compose Color
+ * - Внутренние отступы: 6dp по горизонтали, 4dp по вертикали
+ */
 @Composable
 internal fun Advertisement.Tag.TagItem() {
     Card(
