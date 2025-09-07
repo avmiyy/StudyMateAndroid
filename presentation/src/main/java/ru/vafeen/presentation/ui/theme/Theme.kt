@@ -19,6 +19,7 @@ internal data class AppThemeColors(
     val mainColor: Color,
     val background: Color,
     val text: Color,
+    val backgroundText: Color,
     val buttonColor: Color,
     val error: Color,
 )
@@ -28,8 +29,9 @@ internal data class AppThemeColors(
  */
 private val basePalette = AppThemeColors(
     mainColor = Color(0xFFECEA0E),
-    background = Color.White,
+    background = Background,
     text = Color.Black,
+    backgroundText = Color.White,
     error = Color.Red,
     buttonColor = Color(0xFFF9F9F9)
 )
@@ -40,6 +42,7 @@ private val basePalette = AppThemeColors(
 private val baseDarkPalette = basePalette.copy(
     background = Color.Black,
     text = Color.White,
+    backgroundText = Color.Black,
     buttonColor = Color(0xFF2D2D31)
 )
 
