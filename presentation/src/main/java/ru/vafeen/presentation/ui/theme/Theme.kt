@@ -33,7 +33,7 @@ private val basePalette = AppThemeColors(
     text = Color.Black,
     backgroundText = Color.White,
     error = Color.Red,
-    buttonColor = Color(0xFFF9F9F9)
+    buttonColor = Color(0xFF3B82F6)
 )
 
 /**

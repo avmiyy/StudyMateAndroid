@@ -1,5 +1,6 @@
 package ru.vafeen.presentation.ui.common.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -29,61 +30,62 @@ import ru.vafeen.presentation.ui.theme.ServiceNamesColor
  * Располагает ID слева и далее заголовок с именем автора в колонке.
  */
 @Composable
-internal fun Advertisement.AdvertisementPreviewItem() {
+internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
     Card(
-        modifier = Modifier.padding(5.dp),
+        modifier = Modifier
+            .padding(5.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.backgroundText
-        )
+        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.backgroundText)
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = this@AdvertisementPreviewItem.bgColor?.toComposeColor()
-                    ?: Color.Transparent
-            ),
-            shape = RoundedCornerShape(
-                topStart = 20.dp,
-                topEnd = 20.dp,
-                bottomEnd = 0.dp,
-                bottomStart = 20.dp
-            )
-        ) {
-            Column(
+        Column(modifier = Modifier.clickable(onClick = onClick)) {
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = this@AdvertisementPreviewItem.bgColor?.toComposeColor()
+                        ?: Color.Transparent
+                ),
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomEnd = 0.dp,
+                    bottomStart = 20.dp
+                )
             ) {
-                Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(12.dp))
-                Row {
-                    // TODO(" тут место для картинки")
-                    Text(this@AdvertisementPreviewItem.authorName, fontSize = 14.sp)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                ) {
+                    Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row {
+                        // TODO(" тут место для картинки")
+                        Text(this@AdvertisementPreviewItem.authorName, fontSize = 14.sp)
+                    }
                 }
             }
-        }
-        if (this@AdvertisementPreviewItem.tags.isNotEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, top = 5.dp, bottom = 20.dp)
-            ) {
-                Text(
-                    text = "Теги",
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.W400,
-                    color = ServiceNamesColor
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(5.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+            if (this@AdvertisementPreviewItem.tags.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, top = 5.dp, bottom = 20.dp)
                 ) {
-                    this@AdvertisementPreviewItem.tags.forEach { tag ->
-                        tag.TagItem()
+                    Text(
+                        text = "Теги",
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.W400,
+                        color = ServiceNamesColor
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        this@AdvertisementPreviewItem.tags.forEach { tag ->
+                            tag.TagItem()
+                        }
                     }
                 }
             }
