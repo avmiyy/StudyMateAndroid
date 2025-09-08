@@ -3,7 +3,6 @@ package ru.vafeen.presentation.ui.common.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.vafeen.domain.models.Advertisement
+import ru.vafeen.presentation.ui.common.components.tag.EmptyTagItem
+import ru.vafeen.presentation.ui.common.components.tag.MoreNumberTag
+import ru.vafeen.presentation.ui.common.components.tag.TagItem
 import ru.vafeen.presentation.ui.common.converters.toComposeColor
 import ru.vafeen.presentation.ui.theme.AppTheme
 import ru.vafeen.presentation.ui.theme.ServiceNamesColor
@@ -89,30 +91,40 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
                     }
                 }
             }
-            if (this@AdvertisementPreviewItem.tags.isNotEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, top = 5.dp, bottom = 20.dp)
-                ) {
-                    Text(
-                        text = "Теги",
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.W400,
-                        color = ServiceNamesColor
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    FlowRow(
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, top = 5.dp, bottom = 20.dp)
+            ) {
+                Text(
+                    text = "Теги",
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.W400,
+                    color = ServiceNamesColor
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                if (this@AdvertisementPreviewItem.tags.isNotEmpty()) {
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        this@AdvertisementPreviewItem.tags.forEach { tag ->
+                        // Берем первые 3 тега
+                        this@AdvertisementPreviewItem.tags.take(3).forEach { tag ->
                             tag.TagItem()
                         }
+
+                        // Если тегов больше 3, показываем счетчик оставшихся
+                        if (this@AdvertisementPreviewItem.tags.size > 3) {
+                            val remainingCount = this@AdvertisementPreviewItem.tags.size - 3
+                            MoreNumberTag(numberMore = remainingCount)
+                        }
                     }
+                } else {
+                    EmptyTagItem()
                 }
             }
+
         }
     }
 }
