@@ -176,17 +176,22 @@ internal fun FiltersBottomSheet(
             )
             Spacer(modifier = Modifier.height(5.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Button(
+                    modifier = Modifier.weight(1f),
                     enabled = state != newState,
                     onClick = { onChangeFiltersState(newState) },
                     colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.buttonColor)
                 ) {
                     Text(text = "Сохранить", color = Color.White, fontSize = 14.sp)
                 }
+
                 TextButton(
+                    modifier = Modifier.weight(1f),
                     enabled = state != newState,
                     onClick = { newState = state },
                     colors = ButtonDefaults.buttonColors(
