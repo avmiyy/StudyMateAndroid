@@ -7,16 +7,16 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.vafeen.presentation.ui.theme.AppTheme
 
 
 @Composable
 internal fun EmptyTagItem() {
     Card(
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.serviceNames)
     ) {
         Text(
             "# ",

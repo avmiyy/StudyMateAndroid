@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
@@ -38,6 +40,7 @@ fun RoundedTextFieldWithIcon(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String = "Поиск...",
+    focusRequester: FocusRequester? = null,
     icon: @Composable (() -> Unit)? = null
 ) {
     Box(
@@ -81,7 +84,12 @@ fun RoundedTextFieldWithIcon(
                         innerTextField()
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .let {
+                        it.focusRequester(focusRequester = focusRequester ?: return@let it)
+                    }
             )
         }
     }

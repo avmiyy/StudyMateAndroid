@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,8 @@ import ru.vafeen.presentation.ui.common.components.AdvertisementPreviewItem
 import ru.vafeen.presentation.ui.common.components.ErrorItem
 import ru.vafeen.presentation.ui.common.components.LoadingItem
 import ru.vafeen.presentation.ui.common.components.RoundedTextFieldWithIcon
+import ru.vafeen.presentation.ui.common.components.filters.FiltersBottomSheet
+import ru.vafeen.presentation.ui.common.components.filters.FiltersState
 import ru.vafeen.presentation.ui.theme.AppTheme
 
 /**
@@ -43,9 +46,9 @@ import ru.vafeen.presentation.ui.theme.AppTheme
  */
 @Composable
 internal fun AdvertisementsScreen() {
-    val viewModel = hiltViewModel<AdvertisementsScreenViewModel>()
+    val viewModel = hiltViewModel<AdvertisementsViewModel>()
     val advertisements = viewModel.pagedAdvertisementsFlow.collectAsLazyPagingItems()
-    var searchText by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,8 +58,14 @@ internal fun AdvertisementsScreen() {
         Row {
             RoundedTextFieldWithIcon(
                 modifier = Modifier.weight(1f),
-                value = searchText,
-                onValueChange = { searchText = it },
+                value = state.searchRequest,
+                focusRequester = state.filtersFocusRequester,
+                onValueChange = {
+                    viewModel
+                        .handleIntent(
+                            AdvertisementsIntent.SetSearchRequest(it)
+                        )
+                },
                 placeholder = "Поиск объявлений...",
                 icon = {
                     Icon(
@@ -79,7 +88,13 @@ internal fun AdvertisementsScreen() {
                 tint = Color.White,
                 modifier = Modifier
                     .clip(CircleShape)
-                    .clickable {}
+                    .clickable {
+                        viewModel
+                            .handleIntent(
+                                AdvertisementsIntent
+                                    .SetFiltersBottomSheetVisible(true)
+                            )
+                    }
                     .background(AppTheme.colors.buttonColor)
                     .padding(5.dp)
                     .size(24.dp)
@@ -151,6 +166,15 @@ internal fun AdvertisementsScreen() {
                     }
                 }
             }
+        }
+    }
+    var filtersState: FiltersState by remember { mutableStateOf(FiltersState()) }
+    if (state.isFiltersVisible) {
+        FiltersBottomSheet(state = filtersState, onChangeFiltersState = { filtersState = it }) {
+            viewModel.handleIntent(
+                AdvertisementsIntent
+                    .SetFiltersBottomSheetVisible(false)
+            )
         }
     }
 }

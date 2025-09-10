@@ -24,7 +24,6 @@ import ru.vafeen.presentation.ui.common.components.tag.MoreNumberTag
 import ru.vafeen.presentation.ui.common.components.tag.TagItem
 import ru.vafeen.presentation.ui.common.converters.toComposeColor
 import ru.vafeen.presentation.ui.theme.AppTheme
-import ru.vafeen.presentation.ui.theme.ServiceNamesColor
 
 /**
  * Composable функция для отображения превью объявления в карточке.
@@ -101,7 +100,7 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
                     text = "Теги",
                     fontSize = 10.sp,
                     fontWeight = FontWeight.W400,
-                    color = ServiceNamesColor
+                    color = AppTheme.colors.serviceNames
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 if (this@AdvertisementPreviewItem.tags.isNotEmpty()) {
