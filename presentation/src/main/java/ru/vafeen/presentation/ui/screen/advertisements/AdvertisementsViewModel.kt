@@ -25,16 +25,25 @@ internal class AdvertisementsViewModel @Inject constructor(
     private val advertisementsRemoteRepository: AdvertisementsRemoteRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(AdvertisementsState())
+
+    /**
+     * Наблюдаемый поток состояния экрана объявлений.
+     */
     val state = _state.asStateFlow()
 
     /**
-     * Поток постраничных данных объявлений, кэшируемый в ViewModelScope.
+     * Поток постраничных данных объявлений, кэшируемый в [viewModelScope].
      */
     val pagedAdvertisementsFlow =
         advertisementsRemoteRepository
             .getPagedAnnouncements()
             .cachedIn(viewModelScope)
 
+    /**
+     * Обрабатывает интенты пользовательских действий с экрана.
+     *
+     * @param intent Интент действия пользователя на экране объявлений.
+     */
     fun handleIntent(intent: AdvertisementsIntent) {
         viewModelScope.launch(Dispatchers.IO) {
             when (intent) {
@@ -47,9 +56,19 @@ internal class AdvertisementsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Обновляет флаг видимости панели фильтров.
+     *
+     * @param isVisible Новый флаг видимости фильтров.
+     */
     private fun setFiltersBottomSheetVisible(isVisible: Boolean) =
         _state.update { it.copy(isFiltersVisible = isVisible) }
 
+    /**
+     * Обновляет строку поискового запроса.
+     *
+     * @param searchRequest Новая поисковая строка.
+     */
     private fun setSearchRequest(searchRequest: String) =
         _state.update { it.copy(searchRequest = searchRequest) }
 }

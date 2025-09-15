@@ -11,7 +11,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.vafeen.presentation.ui.theme.AppTheme
 
-
+/**
+ * Composable функция для отображения тега с количеством дополнительных элементов.
+ *
+ * Отображает тег в виде закругленной карточки с текстом вида "+N",
+ * где N — количество скрытых элементов.
+ *
+ * @param numberMore Количество скрытых элементов, отображаемое в теге.
+ *
+ * Карточка имеет:
+ * - Закругление: 10dp со всех сторон
+ * - Цвет фона: serviceNames из текущей темы
+ * - Внутренние отступы: 6dp по горизонтали, 4dp по вертикали
+ * - Размер шрифта текста: 10sp
+ */
 @Composable
 internal fun MoreNumberTag(numberMore: Int) {
     Card(
