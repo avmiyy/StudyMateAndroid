@@ -40,6 +40,7 @@ import ru.vafeen.presentation.ui.theme.AppTheme
  * Экран для отображения списка объявлений с поддержкой пагинации.
  *
  * Загружает объявления из ViewModel, отображает список с состояниями загрузки и ошибками.
+ * Позволяет пользователю выполнять поиск и открывать панель фильтров.
  */
 @Composable
 internal fun AdvertisementsScreen() {
@@ -81,7 +82,7 @@ internal fun AdvertisementsScreen() {
             Spacer(modifier = Modifier.width(15.dp))
             Icon(
                 painter = painterResource(R.drawable.filters),
-                contentDescription = "Поиск",
+                contentDescription = "Фильтры",
                 tint = Color.White,
                 modifier = Modifier
                     .clip(CircleShape)
@@ -99,8 +100,7 @@ internal fun AdvertisementsScreen() {
         }
         Spacer(modifier = Modifier.height(15.dp))
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(1f)
         ) {
             // Состояние загрузки в начале списка (prepend)
             if (advertisements.loadState.prepend is LoadState.Loading) {
@@ -121,7 +121,7 @@ internal fun AdvertisementsScreen() {
                 val error = advertisements.loadState.prepend as LoadState.Error
                 item {
                     ErrorItem(
-                        message = error.error.localizedMessage ?: "Load more error",
+                        message = error.error.localizedMessage ?: "Ошибка загрузки",
                         modifier = Modifier.fillMaxWidth(),
                         onClickRetry = { advertisements.retry() }
                     )
@@ -132,7 +132,7 @@ internal fun AdvertisementsScreen() {
             items(count = advertisements.itemCount) { index ->
                 val advertisement = advertisements[index]
                 if (advertisement != null) {
-                    advertisement.AdvertisementPreviewItem({})
+                    advertisement.AdvertisementPreviewItem {}
                 } else {
                     LoadingItem()
                 }
@@ -143,7 +143,7 @@ internal fun AdvertisementsScreen() {
                 val error = advertisements.loadState.append as LoadState.Error
                 item {
                     ErrorItem(
-                        message = error.error.localizedMessage ?: "Load more error",
+                        message = error.error.localizedMessage ?: "Ошибка загрузки",
                         modifier = Modifier.fillMaxWidth(),
                         onClickRetry = { advertisements.retry() }
                     )
@@ -166,13 +166,13 @@ internal fun AdvertisementsScreen() {
         }
     }
     if (state.isFiltersVisible) {
-        FiltersBottomSheet(initialState = FiltersState(), applyFilters = {
-
-        }) {
-            viewModel.handleIntent(
-                AdvertisementsIntent
-                    .SetFiltersBottomSheetVisible(false)
-            )
+        FiltersBottomSheet(
+            initialState = FiltersState(),
+            applyFilters = {
+                // Функция применения фильтров. Может быть расширена позднее.
+            }
+        ) {
+            viewModel.handleIntent(AdvertisementsIntent.SetFiltersBottomSheetVisible(false))
         }
     }
 }

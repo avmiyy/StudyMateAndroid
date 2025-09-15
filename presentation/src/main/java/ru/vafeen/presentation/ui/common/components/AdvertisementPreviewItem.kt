@@ -27,33 +27,13 @@ import ru.vafeen.presentation.ui.common.converters.toComposeColor
 import ru.vafeen.presentation.ui.theme.AppTheme
 
 /**
- * Composable функция для отображения превью объявления в карточке.
+ * Composable функция для отображения превью объявления в виде карточки.
  *
- * Отображает карточку объявления с заголовком, автором и тегами. Карточка состоит из двух частей:
- * основной контент с закругленными углами и секция тегов. Поддерживает нажатие на всю карточку.
+ * Отображает информацию об объявлении: заголовок, имя автора и теги.
+ * Поддерживает нажатие на всю карточку.
  *
- * @property onClick Функция обратного вызова при нажатии на карточку объявления
- *
- * @property title Заголовок объявления, отображается жирным шрифтом 16sp
- * @property authorName Имя автора объявления, отображается обычным шрифтом 14sp
- * @property bgColor Фоновый цвет карточки объявления, конвертируется в Compose Color
- * @property tags Список тегов объявления, отображается в FlowRow если не пустой
- *
- * Внешняя карточка имеет:
- * - Отступы: 5dp со всех сторон
- * - Закругление: 20dp
- * - Цвет фона: backgroundText из темы приложения
- *
- * Внутренняя карточка имеет:
- * - Закругление: 20dp сверху и слева, 0dp справа снизу
- * - Цвет фона: из bgColor или прозрачный если не указан
- * - Внутренние отступы: 20dp
- *
- * Секция тегов:
- * - Отображается только если tags не пустой
- * - Отступы: 20dp по бокам, 5dp сверху, 20dp снизу
- * - Заголовок "Теги" серого цвета, 10sp
- * - Теги располагаются в FlowRow с отступами 5dp по горизонтали и 4dp по вертикали
+ * @receiver Объект объявления [Advertisement], для отображения данных.
+ * @param onClick Обратный вызов, вызываемый при нажатии на карточку.
  */
 @Composable
 internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
@@ -65,8 +45,7 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.clickable(onClick = onClick)) {
             Card(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
                     containerColor = this@AdvertisementPreviewItem.bgColor?.toComposeColor()
                         ?: Color.Transparent
@@ -84,7 +63,7 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
                         .padding(20.dp)
                 ) {
                     Text(
-                        title,
+                        text = title,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 2,
@@ -92,8 +71,11 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Row {
-                        // TODO(" тут место для картинки")
-                        Text(this@AdvertisementPreviewItem.authorName, fontSize = 14.sp)
+                        // Можно добавить изображение автора сюда
+                        Text(
+                            text = this@AdvertisementPreviewItem.authorName,
+                            fontSize = 14.sp
+                        )
                     }
                 }
             }
@@ -112,11 +94,19 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(4.dp))
                 this@AdvertisementPreviewItem.tags.TagRow()
             }
-
         }
     }
 }
 
+/**
+ * Отображает строку тегов объявления.
+ *
+ * Показывает до 3 тегов, если тегов больше - отображает счетчик оставшихся.
+ * Если тегов нет - отображает пустой элемент.
+ *
+ * @receiver Список тегов объявления.
+ * @param modifier Модификатор для строки.
+ */
 @Composable
 internal fun List<Advertisement.Tag>.TagRow(
     modifier: Modifier = Modifier,

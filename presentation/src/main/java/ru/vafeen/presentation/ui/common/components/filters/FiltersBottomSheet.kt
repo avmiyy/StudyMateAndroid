@@ -49,6 +49,13 @@ import ru.vafeen.presentation.R
 import ru.vafeen.presentation.ui.common.components.TagRow
 import ru.vafeen.presentation.ui.theme.AppTheme
 
+/**
+ * Модальный BottomSheet с фильтрами для объявлений.
+ *
+ * @param initialState Начальное состояние фильтров.
+ * @param applyFilters Функция применяющая выбранные фильтры.
+ * @param onDismissRequest Коллбэк на закрытие BottomSheet.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FiltersBottomSheet(
@@ -65,7 +72,6 @@ internal fun FiltersBottomSheet(
             )
         })
     val state by viewModel.state.collectAsState()
-    val standardHeight = 27.dp
     ModalBottomSheet(
         onDismissRequest = { viewModel.handleIntent(FiltersIntent.OnDismissRequest) },
         containerColor = AppTheme.colors.backgroundText
@@ -119,7 +125,7 @@ internal fun FiltersBottomSheet(
                     )
                 }
                 Image(
-                    painter = painterResource(id = R.drawable.arrow_down), // Замените на вашу иконку стрелки
+                    painter = painterResource(id = R.drawable.arrow_down),
                     contentDescription = "Раскрыть список",
                     modifier = Modifier.size(16.dp)
                 )
@@ -192,8 +198,6 @@ internal fun FiltersBottomSheet(
                 fontWeight = FontWeight.W500
             )
             Spacer(modifier = Modifier.height(5.dp))
-            // поле ввода тегов
-            // строчка с тегами (скопировать, уже такое есть)
             Row(
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
@@ -235,8 +239,7 @@ internal fun FiltersBottomSheet(
                             innerTextField()
                         }
                     },
-                    modifier = Modifier
-                        .height(27.dp) // точная высота под текст
+                    modifier = Modifier.height(27.dp)
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -276,6 +279,15 @@ internal fun FiltersBottomSheet(
     }
 }
 
+/**
+ * Кнопка выбора пола фильтра.
+ *
+ * @param modifier Модификатор для кнопки.
+ * @param gender Пол, которым соответствует кнопка.
+ * @param currentGender Текущий выбранный пол.
+ * @param text Текст на кнопке.
+ * @param onClick Обработчик нажатия.
+ */
 @Composable
 internal fun GenderButton(
     modifier: Modifier = Modifier,
@@ -304,6 +316,12 @@ internal fun GenderButton(
     }
 }
 
+/**
+ * Компонент элемента выпадающего меню возраста.
+ *
+ * @param text Текст элемента меню.
+ * @param onClick Обработчик нажатия на элемент.
+ */
 @Composable
 internal fun AgeDropDownMenuButton(text: String, onClick: () -> Unit) =
     DropdownMenuItem(
@@ -311,6 +329,14 @@ internal fun AgeDropDownMenuButton(text: String, onClick: () -> Unit) =
         onClick = onClick
     )
 
+/**
+ * Кнопка выбора или сброса возраста фильтра.
+ *
+ * @param modifier Модификатор для кнопки.
+ * @param currentAge Текущие выбранные возрастные значения (может быть null).
+ * @param title Заголовок кнопки ("От" или "До").
+ * @param onAgeChange Обработчик изменения возраста.
+ */
 @Composable
 internal fun AgeButton(
     modifier: Modifier = Modifier,
@@ -362,9 +388,5 @@ internal fun AgeButton(
                 color = AppTheme.colors.text
             )
         }
-
-
     }
-
-
 }
