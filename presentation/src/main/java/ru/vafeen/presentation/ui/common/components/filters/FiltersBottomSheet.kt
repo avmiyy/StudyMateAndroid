@@ -15,16 +15,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,23 +38,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.vafeen.presentation.R
+import ru.vafeen.presentation.ui.common.components.TagRow
 import ru.vafeen.presentation.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FiltersBottomSheet(
-    state: FiltersState,
-    onChangeFiltersState: (FiltersState) -> Unit,
-    onDismissRequest: () -> Unit
+    initialState: FiltersState,
+    applyFilters: (FiltersState) -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
-    var newState by remember { mutableStateOf(state) }
+    val viewModel = hiltViewModel<FiltersViewModel, FiltersViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(
+                initialState = initialState,
+                onDismissRequest = onDismissRequest,
+                applyFilters = applyFilters
+            )
+        })
+    val state by viewModel.state.collectAsState()
+    val standardHeight = 27.dp
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = { viewModel.handleIntent(FiltersIntent.OnDismissRequest) },
         containerColor = AppTheme.colors.backgroundText
     ) {
         Column(
@@ -86,8 +103,8 @@ internal fun FiltersBottomSheet(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                if (newState.city != null) {
-                    newState.city?.let {
+                if (state.city != null) {
+                    state.city?.let {
                         Text(
                             text = it,
                             fontSize = 14.sp,
@@ -130,21 +147,21 @@ internal fun FiltersBottomSheet(
                 GenderButton(
                     modifier = Modifier.weight(1f),
                     gender = Gender.Every,
-                    currentGender = newState.gender,
+                    currentGender = state.gender,
                     text = "Любой"
-                ) { newState = newState.copy(gender = Gender.Every) }
+                ) { viewModel.handleIntent(FiltersIntent.SetGender(Gender.Every)) }
                 GenderButton(
                     modifier = Modifier.weight(1f),
                     gender = Gender.Male,
-                    currentGender = newState.gender,
+                    currentGender = state.gender,
                     text = "Мужской"
-                ) { newState = newState.copy(gender = Gender.Male) }
+                ) { viewModel.handleIntent(FiltersIntent.SetGender(Gender.Male)) }
                 GenderButton(
                     modifier = Modifier.weight(1f),
                     gender = Gender.Female,
-                    currentGender = newState.gender,
+                    currentGender = state.gender,
                     text = "Женский"
-                ) { newState = newState.copy(gender = Gender.Female) }
+                ) { viewModel.handleIntent(FiltersIntent.SetGender(Gender.Female)) }
             }
 
             Text(
@@ -157,15 +174,15 @@ internal fun FiltersBottomSheet(
             Row(modifier = Modifier.fillMaxWidth()) {
                 AgeButton(
                     modifier = Modifier.weight(1f),
-                    currentAge = newState.ageFrom,
+                    currentAge = state.ageFrom,
                     title = "От"
-                ) { newState = newState.copy(ageFrom = it) }
+                ) { viewModel.handleIntent(FiltersIntent.SetAgeFrom(it)) }
                 Spacer(modifier = Modifier.width(11.dp))
                 AgeButton(
                     modifier = Modifier.weight(1f),
-                    currentAge = newState.ageTo,
+                    currentAge = state.ageTo,
                     title = "До"
-                ) { newState = newState.copy(ageTo = it) }
+                ) { viewModel.handleIntent(FiltersIntent.SetAgeTo(it)) }
             }
 
             Text(
@@ -175,6 +192,57 @@ internal fun FiltersBottomSheet(
                 fontWeight = FontWeight.W500
             )
             Spacer(modifier = Modifier.height(5.dp))
+            // поле ввода тегов
+            // строчка с тегами (скопировать, уже такое есть)
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .border(
+                        BorderStroke(1.dp, AppTheme.colors.serviceNames),
+                        shape = RoundedCornerShape(20.dp)
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(AppTheme.colors.buttonColor)
+                        .clickable { viewModel.handleIntent(FiltersIntent.AddCurrentTagToTags) },
+                    painter = painterResource(R.drawable.plus),
+                    tint = AppTheme.colors.backgroundText,
+                    contentDescription = stringResource(R.string.add_this_tag)
+                )
+                BasicTextField(
+                    value = state.currentTag,
+                    onValueChange = { viewModel.handleIntent(FiltersIntent.SetCurrentTag(it)) },
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        color = AppTheme.colors.text
+                    ),
+                    decorationBox = { innerTextField ->
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        ) {
+                            if (state.currentTag.isEmpty()) {
+                                Text(
+                                    text = "Введите тег...",
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                            innerTextField()
+                        }
+                    },
+                    modifier = Modifier
+                        .height(27.dp) // точная высота под текст
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            state.tags.TagRow()
+
+            Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -183,8 +251,8 @@ internal fun FiltersBottomSheet(
             ) {
                 Button(
                     modifier = Modifier.weight(1f),
-                    enabled = state != newState,
-                    onClick = { onChangeFiltersState(newState) },
+                    enabled = initialState != state,
+                    onClick = { viewModel.handleIntent(FiltersIntent.ApplyFilters) },
                     colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.buttonColor)
                 ) {
                     Text(text = "Сохранить", color = Color.White, fontSize = 14.sp)
@@ -192,8 +260,8 @@ internal fun FiltersBottomSheet(
 
                 TextButton(
                     modifier = Modifier.weight(1f),
-                    enabled = state != newState,
-                    onClick = { newState = state },
+                    enabled = initialState != state,
+                    onClick = { viewModel.handleIntent(FiltersIntent.ClearFilters) },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = AppTheme.colors.buttonColor,
                         containerColor = Color.Transparent,

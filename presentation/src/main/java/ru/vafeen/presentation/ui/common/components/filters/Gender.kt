@@ -1,5 +1,21 @@
 package ru.vafeen.presentation.ui.common.components.filters
 
+/**
+ * Перечисление полов для фильтрации.
+ */
 internal enum class Gender {
-    Male, Female, Every
+    /**
+     * Мужской пол.
+     */
+    Male,
+
+    /**
+     * Женский пол.
+     */
+    Female,
+
+    /**
+     * Любой пол (без фильтрации).
+     */
+    Every
 }

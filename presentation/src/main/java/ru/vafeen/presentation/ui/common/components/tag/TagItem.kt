@@ -29,6 +29,8 @@ import ru.vafeen.presentation.ui.common.converters.toComposeColor
 @Composable
 internal fun Advertisement.Tag.TagItem() {
     Card(
+        // TODO(сделать здесь отсутсвие цвета и рамку)
+//        border = if (color == Color.) BorderStroke(1.dp, AppTheme.colors.text),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = this@TagItem.color.toComposeColor())
     ) {

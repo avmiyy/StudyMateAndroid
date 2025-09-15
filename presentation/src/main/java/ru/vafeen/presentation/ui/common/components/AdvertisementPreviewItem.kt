@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.vafeen.domain.models.Advertisement
@@ -82,7 +83,13 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
                         .fillMaxWidth()
                         .padding(20.dp)
                 ) {
-                    Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        title,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                     Row {
                         // TODO(" тут место для картинки")
@@ -103,27 +110,34 @@ internal fun Advertisement.AdvertisementPreviewItem(onClick: () -> Unit) {
                     color = AppTheme.colors.serviceNames
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                if (this@AdvertisementPreviewItem.tags.isNotEmpty()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(5.dp),
-                    ) {
-                        // Берем первые 3 тега
-                        this@AdvertisementPreviewItem.tags.take(3).forEach { tag ->
-                            tag.TagItem()
-                        }
-
-                        // Если тегов больше 3, показываем счетчик оставшихся
-                        if (this@AdvertisementPreviewItem.tags.size > 3) {
-                            val remainingCount = this@AdvertisementPreviewItem.tags.size - 3
-                            MoreNumberTag(numberMore = remainingCount)
-                        }
-                    }
-                } else {
-                    EmptyTagItem()
-                }
+                this@AdvertisementPreviewItem.tags.TagRow()
             }
 
         }
+    }
+}
+
+@Composable
+internal fun List<Advertisement.Tag>.TagRow(
+    modifier: Modifier = Modifier,
+) {
+    if (this.isNotEmpty()) {
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+        ) {
+            // Берем первые 3 тега
+            this@TagRow.take(3).forEach { tag ->
+                tag.TagItem()
+            }
+
+            // Если тегов больше 3, показываем счетчик оставшихся
+            if (this@TagRow.size > 3) {
+                val remainingCount = this@TagRow.size - 3
+                MoreNumberTag(numberMore = remainingCount)
+            }
+        }
+    } else {
+        EmptyTagItem()
     }
 }
